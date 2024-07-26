@@ -1,0 +1,15 @@
+# Compiled JavaScript files
+lib/**/*.js
+lib/**/*.js.map
+lib/*.json
+
+# TypeScript v1 declaration files
+typings/
+
+# Node.js dependency directory
+*.local
+node_modules/
+
+# dotenv environment variables file
+.env
+pickomeapi-firebase-adminsdk-qixzp-f33982f6b4.json

@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>API Interaction</title>
+  </head>
+  <body>
+    <button id="identity-button">주민등록 진위확인</button>
+    <button id="driver-license-button">운전면허 진위 확인</button>
+    <button id="real-estate-button">부동산등기부등본</button>
+    <button id="building-register-button">일반건축물대장</button>
+    <button id="multiowned-buildings-button">집합건축물대장</button>
+
+    <script>
+      let data = {};
+
+      document.addEventListener("DOMContentLoaded", (event) => {
+        const IdentityButton = document.getElementById("identity-button");
+        const DriverLicenseButton = document.getElementById(
+          "driver-license-button"
+        );
+        const RealEstateButton = document.getElementById("real-estate-button");
+        const BuildingButton = document.getElementById(
+          "building-register-button"
+        );
+        const MultiownedButton = document.getElementById(
+          "multiowned-buildings-button"
+        );
+        // 인증서로 주민등록 진위확인 요청을 보내는 함수
+        IdentityButton.addEventListener("click", () => {
+          fetch(
+            "https://us-central1-pickomeapi.cloudfunctions.net/IdentityAPI/Identity",
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                organization: "0002",
+                loginType: "0",
+                certType: "1",
+                identity: "0008274031113",
+                userName: "김유진",
+                issueDate: "20240528",
+              }),
+            }
+          )
+            .then((response) => response.json())
+            .then((data) => {
+              console.log("data: ", data);
+              if (data) {
+                userData = data;
+              }
+            })
+            .catch((error) => console.error("Error:", error));
+        });
+
+        // 운전면허 진위확인 요청을 보내는 함수
+        DriverLicenseButton.addEventListener("click", () => {
+          fetch(
+            "https://us-central1-pickomeapi.cloudfunctions.net/IdentityAPI/DriverLicense",
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                organization: "0001",
+                loginType: "2",
+                certType: "1",
+                identity: "9610111034410",
+                loginUserName: "손건희",
+                birthDate: "961011",
+                serialNo: "JH8P6R",
+                userName: "손건희",
+                licenseNumber: "281780773940",
+              }),
+            }
+          )
+            .then((response) => response.json())
+            .then((data) => {
+              console.log("data: ", data);
+              if (data) {
+                userData = data;
+              }
+            })
+            .catch((error) => console.error("Error:", error));
+        });
+
+        // 부동산등기부등본 요청을 보내는 함수
+        RealEstateButton.addEventListener("click", () => {
+          fetch(
+            "https://us-central1-pickomeapi.cloudfunctions.net/PickomeAPI/RealEstate",
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                organization: "0002",
+                phoneNo: "01034549050",
+                password: "0101",
+                inquiryType: "3",
+                realtyType: "1",
+                addr_sido: "경기도",
+                addr_sigungu: "평택시",
+                addr_roadName: "상서재로5길",
+                addr_buildingNumber: "15",
+                dong: "107",
+                ho: "2005",
+                jointMortgageJeonseYN: "1",
+                tradingYN: "1",
+                electronicClosedYN: "1",
+                ePrepayNo: "P87015823484",
+                ePrepayPass: "Jeff96Jeuan$",
+                issueType: "1",
+                applicationType: "1",
+              }),
+            }
+          )
+            .then((response) => response.json())
+            .then((data) => {
+              console.log("data: ", data);
+              if (data) {
+                userData = data;
+              }
+            })
+            .catch((error) => console.error("Error:", error));
+        });
+
+        // 일반건축물대장 요청을 보내는 함수
+        BuildingButton.addEventListener("click", () => {
+          fetch(
+            "https://us-central1-pickomeapi.cloudfunctions.net/PickomeAPI/BuildingRegisterGeneral",
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                organization: "0001",
+                loginType: "1",
+                userId: "uj0791",
+                userPassword: "lewis990322*",
+                address: "보문로 34나길 11",
+                type: "0",
+              }),
+            }
+          )
+            .then((response) => response.json())
+            .then((data) => {
+              console.log("data: ", data);
+              if (data) {
+                userData = data;
+              }
+            })
+            .catch((error) => console.error("Error:", error));
+        });
+
+        // 집합건축물대장 표제부 요청을 보내는 함수
+        MultiownedButton.addEventListener("click", () => {
+          fetch(
+            "https://us-central1-pickomeapi.cloudfunctions.net/PickomeAPI/BuildingRegisterSet",
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                organization: "0001",
+                loginType: "1",
+                userId: "uj0791",
+                userPassword: "lewis990322*",
+                address: "경기도 평택시 상서재로5길 15",
+                dong: "107",
+                ho: "2005",
+                type: "0",
+              }),
+            }
+          )
+            .then((response) => response.json())
+            .then((data) => {
+              console.log("data: ", data);
+              if (data) {
+                userData = data;
+              }
+            })
+            .catch((error) => console.error("Error:", error));
+        });
+      });
+    </script>
+  </body>
+</html>
