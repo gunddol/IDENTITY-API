@@ -1,5 +1,4 @@
 import { config } from "dotenv";
-
 config(); // .env 파일
 
 import { ReqIdentity, ReqDriverLicense } from "../models/identity.type";
@@ -37,18 +36,16 @@ codef.setClientInfoForDemo(DEMO_CLIENT_ID, DEMO_CLIENT_SECRET);
 
 const identityBaseURL = "/v1/kr/public/mw/identity-card/check-status";
 
-export const codefCertService = async (userData: ReqIdentity) => {
+export const codefIdentityService = async (userData: ReqIdentity) => {
   try {
     logger.info(" >>> 주민등록 진위확인 시작 <<< ");
-    logger.info(
-      `userName: ${userData.userName}, userData: ${JSON.stringify(userData)}`,
-      {
-        structuredData: true,
-      }
-    );
+
     const certPassword = encryptPassword("nomadicpeace96!");
     const data = {
       ...userData,
+      organization: "0002",
+      loginType: "0",
+      certType: "1",
       certFile: CERT_FILE,
       keyFile: KEY_FILE,
       certPassword: certPassword,
@@ -78,18 +75,16 @@ export const codefDriverService = async (userData: ReqDriverLicense) => {
     const licenseNumber = encryptPassword(userData.licenseNumber);
     const data = {
       ...userData,
+      organization: "0001",
+      loginType: "2",
+      certType: "1",
+      identity: "6928802519",
+      loginUserName: "주식회사 노매딕피스",
       certFile: CERT_FILE,
       keyFile: KEY_FILE,
       certPassword: certPassword,
       licenseNumber: licenseNumber,
     };
-
-    logger.info(
-      `userName: ${userData.userName}, certFile: ${data.certFile}, keyFile: ${data.keyFile}`,
-      {
-        structuredData: true,
-      }
-    );
 
     const response = await codef.requestProduct(
       driverBaseURL,

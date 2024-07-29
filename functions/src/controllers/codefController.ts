@@ -1,9 +1,12 @@
-import {Request, Response} from "express";
-import {firestore} from "../config";
+import { Request, Response } from "express";
+import { firestore } from "../config";
 
 import * as logger from "firebase-functions/logger";
-import {ReqIdentity, ReqDriverLicense} from "../models/identity.type";
-import {codefCertService, codefDriverService} from "../services/codefService";
+import { ReqIdentity, ReqDriverLicense } from "../models/identity.type";
+import {
+  codefIdentityService,
+  codefDriverService,
+} from "../services/codefService";
 
 export const saveData = async (
   collectionName: string,
@@ -26,10 +29,7 @@ export const saveData = async (
   }
 };
 
-export const identity = async (
-  req: Request<ReqIdentity>,
-  res: Response
-) => {
+export const identity = async (req: Request<ReqIdentity>, res: Response) => {
   try {
     const userData = req.body; // POST 요청의 body에서 가져옴
     const docName = `${userData.userName}${userData.identity.substring(0, 6)}`;
@@ -39,7 +39,7 @@ export const identity = async (
     });
 
     saveData("Identity", `${docName}_req`, userData); // 요청 데이터 저장
-    const response = await codefCertService(userData);
+    const response = await codefIdentityService(userData);
     saveData("Identity", `${docName}_res`, JSON.parse(response)); // 응답 데이터 객체로 설정 후 저장
 
     res.status(200).send(response);
@@ -54,7 +54,7 @@ export const driverLicense = async (
 ) => {
   try {
     const userData = req.body; // POST 요청의 body에서 가져옴
-    const docName = `${userData.identity.substring(0, 6)}${userData.userName}`;
+    const docName = `${userData.userName}${userData.birthDate.substring(0, 6)}`;
 
     logger.info(`CODEF Identity Service 실행, userName: ${docName}`, {
       structuredData: true,
